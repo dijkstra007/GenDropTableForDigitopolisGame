@@ -10,13 +10,13 @@ const NUM_OF_POSSIBLE_COMBINATION = 1536
 const cost = 1687.5
 
 
-var sumProb = 0;
+var sumWinProb = 0;
 var item = []
 var rewardSet = new Set();
 var total_time = []
 var sumOfTotaltime;
-
-
+var loseProb;
+var tempProb;
 
 function caculateItemProb(){
   let sum = 0;
@@ -28,18 +28,18 @@ function caculateItemProb(){
 }
 function printNewProbAndGetResult(){
   let sum=0;
-  let sumProb=0;
+  let sumWinProb=0;
   for(let i =1 ;i<item.length;i++){
       let aItem = item[i].getItem();
       let aReward = item[i].getReward();
       let aProb = item[i].getProbability();
-      sumProb+=aProb;
+      sumWinProb+=aProb;
       sum+=aProb*1000000*aReward
     console.log("Item: "+aItem+" Reward: "+aReward+" Prob: "+aProb)
   }
   console.log("new sumMoney "+sum)
   console.log("return rate: "+sum/150000000*100)
-  console.log("sum of win prob: "+sumProb)
+  console.log("sum of win prob: "+sumWinProb)
 }
 function genItem(){
   item = (new GenItem({numberOfFace:9,numberOfRows:3,rewardTable:rewardTable}) ).getItem()
@@ -47,6 +47,7 @@ function genItem(){
   numberOfWinning  = item.length-1;
 }
 function calculateAllProbabilityInFirstRoundWithEqualDistribution(){
+  let sumWinProb = 0;
   for(val of item){
     let reward = val.getReward();
     rewardSet.add(reward);
@@ -57,50 +58,76 @@ function calculateAllProbabilityInFirstRoundWithEqualDistribution(){
     val.setProbability(probability);
     val.printItemAndRewardAndProb();
     if(reward!=0){
-      sumProb+=probability;
+      sumWinProb+=probability;
       total_time.push(probability*1000000*reward)
     }
   }
-  console.log(sumProb);
+  console.log("Sum of Win probability = "+sumWinProb);
+  return sumWinProb
 
 }
-function increaseWinProbabilityByDecreaseLoseProbability(){
+function countingItemWhichRewardEqual(reward){
+  let cnt = 0
+  for(let i = 1 ;i<item.length;i++){
+      if(item[i].getReward() == reward){
+        cnt = cnt +1
+      }
+      else if(item[i].getReward() >= reward){
+        break;
+      }
+  }
+  return cnt;
+}
+function increaseWinProbabilityByDecreaseLoseProbability(loseProb){
+  console.log(loseProb);
   let p1 = loseProb/2;
   let p2 = p1/2;
   let p3 = p2/2;
   let p4 = p3/2;
   let p5 = loseProb-(p1+p2+p3+p4);
-  let index = 1;
+  let indexReward = 1
+  let indexItem = 1
   let limit = numberOfWinning;
   let eachLoopLimit = parseInt(limit/10)
   //TODO -: Need to group by reward
-  for(;index<=eachLoopLimit;index++){
-      item[index].adjustProbability(p1);
+  // for(;indexReward<=eachLoopLimit)
+  // for(;index<=eachLoopLimit;index++){
+  //     item[index].adjustProbability(p1);
+  // }
+  // for(;index<=eachLoopLimit*2;index++){
+  //     item[index].adjustProbability(p2);
+  // }
+  // for(;index<=eachLoopLimit*3;index++){
+  //     item[index].adjustProbability(p3);
+  // }
+  // for(;index<=eachLoopLimit*4;index++){
+  //     item[index].adjustProbability(p4);
+  // }
+  // for(;index<=eachLoopLimit*5;index++){
+  //     item[index].adjustProbability(p5);
+  // }
+}
+function CreateRewardSetsFromItem(item){
+  let rewardSet = new Set()
+  for(val of item){
+    rewardSet.add(val.getReward())
   }
-  for(;index<=eachLoopLimit*2;index++){
-      item[index].adjustProbability(p2);
-  }
-  for(;index<=eachLoopLimit*3;index++){
-      item[index].adjustProbability(p3);
-  }
-  for(;index<=eachLoopLimit*4;index++){
-      item[index].adjustProbability(p4);
-  }
-  for(;index<=eachLoopLimit*5;index++){
-      item[index].adjustProbability(p5);
-  }
+  return rewardSet
 }
 genItem()
+rewardSet = CreateRewardSetsFromItem(item)
+sumWinProb = calculateAllProbabilityInFirstRoundWithEqualDistribution()
+loseProb = 1-(sumWinProb)
+item[0].setProbability(loseProb);
+tempProb = loseProb-0.80;
+increaseWinProbabilityByDecreaseLoseProbability(tempProb)
+//printNewProbAndGetResult();
+console.log(countingItemWhichRewardEqual(750));
+/*
 calculateAllProbabilityInFirstRoundWithEqualDistribution()
-var loseProb = (1-sumProb)-0.80
-console.log("loseProb "+loseProb);
-increaseWinProbabilityByDecreaseLoseProbability();
-//
-// // item[1].adjustProbability(tempProb);
-// // for(let i= parseInt(item.length/2);i<item.length;i++){
-// //   item[i].setProbability(item[i].getProbability()/10);
-// // }
-sumProb = caculateItemProb()
+var loseProb = (1-sumWinProb)-0.80
+increaseWinProbabilityByDecreaseLoseProbability(loseProb);
+sumWinProb = caculateItemProb()
 printNewProbAndGetResult();
 var sumTempProb = 0
 for(let i=1;i<item.length;i++){
@@ -109,5 +136,4 @@ for(let i=1;i<item.length;i++){
 console.log("tempSum = "+sumTempProb);
 sumOfTotaltime = total_time.reduce(function(a,b){return a+b})
 var returnRate = sumOfTotaltime/150000000
-// console.log(returnRate);
-// console.log(rewardSet);
+*/
