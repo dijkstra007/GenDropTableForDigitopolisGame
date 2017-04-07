@@ -66,17 +66,17 @@ function calculateAllProbabilityInFirstRoundWithEqualDistribution(){
   return sumWinProb
 
 }
-function countingItemWhichRewardEqual(reward){
-  let cnt = 0
+function findIndexOfItemWhichRewardEqual(reward){
+  let index = []
   for(let i = 1 ;i<item.length;i++){
       if(item[i].getReward() == reward){
-        cnt = cnt +1
+        index.push(i)
       }
       else if(item[i].getReward() >= reward){
         break;
       }
   }
-  return cnt;
+  return index
 }
 function increaseWinProbabilityByDecreaseLoseProbability(loseProb){
   console.log(loseProb);
@@ -89,6 +89,7 @@ function increaseWinProbabilityByDecreaseLoseProbability(loseProb){
   let indexItem = 1
   let limit = numberOfWinning;
   let eachLoopLimit = parseInt(limit/10)
+  
   //TODO -: Need to group by reward
   // for(;indexReward<=eachLoopLimit)
   // for(;index<=eachLoopLimit;index++){
@@ -121,8 +122,8 @@ loseProb = 1-(sumWinProb)
 item[0].setProbability(loseProb);
 tempProb = loseProb-0.80;
 increaseWinProbabilityByDecreaseLoseProbability(tempProb)
-//printNewProbAndGetResult();
-console.log(countingItemWhichRewardEqual(750));
+
+
 /*
 calculateAllProbabilityInFirstRoundWithEqualDistribution()
 var loseProb = (1-sumWinProb)-0.80
