@@ -15,7 +15,7 @@ class GenItem{
       for(let i=0;i<this.numberOfRows;i++){
           temp.push(this.genArr[i]);
       }
-      this.allPossibleItemArray.push(new SlotItem({item:temp,rewardTable:this.rewardTable}));
+      this.allPossibleItemArray.push(new SlotItem({itemList:temp,countList:[3,3,3],rewardTable:this.rewardTable}));
       return ;
     }
     for(let item=0;item<this.numberOfFace;item++){
