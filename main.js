@@ -1,6 +1,6 @@
-const GenItem  = require('./GenItem')
-const Item = require('./Item')
-const ExportItemInJSONFormat = require('./ExportItemInJSONFormat')
+const GenItem  = require('./src/GenItem')
+const Item = require('./src/Item')
+const ExportItemInJSONFormat = require('./src/ExportItemInJSONFormat')
 
 var multiplier = [0,5,10,20,50,100,200,500,1000]
 var rewardTable = [0,250,500,1000,2500,5000,10000,25000,50000]
@@ -9,7 +9,6 @@ const RETURN_RATE = 90.0000000
 const EPSILON = 0.5;
 const MIN_BET_PER_LINE = 50;
 const NUM_OF_POSSIBLE_COMBINATION = 1536
-const cost = 1687.5
 
 
 var sumWinProb = 0;
@@ -44,6 +43,7 @@ function printNewProbAndGetResult(){
   console.log("return rate: "+sum/150000000*100)
   console.log("sum of win prob: "+sumWinProb)
 }
+
 function genItem(){
   allPossibleItem = (new GenItem({numberOfFace:9,numberOfRows:3,rewardTable:rewardTable}) ).getItem()
   allPossibleItem.sort(function(a,b){return a.reward - b.reward})
@@ -116,6 +116,6 @@ rewardSet = CreateWinRewardSetsFromItem(allPossibleItem)
 sumWinProb = calculateAllProbability(rewardSet)
 loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
-console.log("---------------------------------")
-printNewProbAndGetResult()
-//console.log(allPossibleItem[0])
+//printNewProbAndGetResult()
+printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
+printItemInJSON.print()
