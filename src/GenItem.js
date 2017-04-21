@@ -18,7 +18,7 @@ class GenItem{
       this.allPossibleItemArray.push(new SlotItem({itemList:temp,countList:[3,3,3],rewardTable:this.rewardTable}));
       return ;
     }
-    for(let item=0;item<this.numberOfFace;item++){
+    for(let item=0;item<=this.numberOfFace;item++){
       if(item!=0 && this.isDuplicateItemInArray(index,item)){
         continue;
       }

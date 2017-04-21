@@ -22,5 +22,23 @@ class ExportItemInJSONFormat{
     }
     console.log("]")
   }
+  writeFile(fileName){
+    var o = {}
+    var key = 'dropTable'
+    o[key] = []
+    for(let i=0;i<this.allPossibleItem.length;i++){
+      let rate = this.allPossibleItem[i].getProbability()
+      let itemPairedCount = this.allPossibleItem[i].getItemListWithCountNumber()
+      
+      var data = {
+        dropRate: rate,
+        dropSymbols: itemPairedCount
+      }
+      o[key].push(data)
+    }
+    // fs.writeFile('slot1.json', JSON.stringify(o, null, 4))
+    var fs = require('fs')
+    fs.writeFile(fileName, JSON.stringify(o, null, 4));
+  }
 }
 module.exports = ExportItemInJSONFormat;

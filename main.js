@@ -4,7 +4,6 @@ const ExportItemInJSONFormat = require('./src/ExportItemInJSONFormat')
 
 var multiplier = [0,5,10,20,50,100,200,500,1000]
 var rewardTable = [0,250,500,1000,2500,5000,10000,25000,50000]
-var numberOfWinning;
 const RETURN_RATE = 90.0000000
 const EPSILON = 0.5;
 const MIN_BET_PER_LINE = 50;
@@ -15,9 +14,7 @@ var sumWinProb = 0;
 var allPossibleItem = []
 var rewardSet = new Set();
 var total_time = []
-var sumOfTotaltime;
 var loseProb;
-var tempProb;
 
 function printNewProbAndGetResult(){
   let sum=0;
@@ -45,9 +42,10 @@ function printNewProbAndGetResult(){
 }
 
 function genItem(){
-  allPossibleItem = (new GenItem({numberOfFace:9,numberOfRows:3,rewardTable:rewardTable}) ).getItem()
+  allPossibleItem = (new GenItem({numberOfFace:8,numberOfRows:3,rewardTable:rewardTable}) ).getItem()
   allPossibleItem.sort(function(a,b){return a.reward - b.reward})
   numberOfWinning  = allPossibleItem.length-1;
+  console.log("number of winning = "+numberOfWinning)
 }
 
 function calculateAllProbability(rewardSet){
@@ -84,23 +82,6 @@ function findIndexOfItemWhichRewardEqual(reward){
   }
   return index
 }
-function dividedArrayIntoSubArray(array,amountOfArrays){
-  let chunk
-  let newArray = []
-  if(array.length%amountOfArrays==0){
-    chunk = parseInt(array.length/amountOfArrays)
-  }
-  else{
-    chunk = parseInt(array.length/amountOfArrays)+1
-  }
-
-  for(let i = 0 ; i < array.length;i+=chunk)
-  {
-    let sliced = array.slice(i,i+chunk)
-    newArray.push(sliced)
-  }
-  return newArray
-}
 
 function CreateWinRewardSetsFromItem(item){
   let rewardSet = new Set()
@@ -112,10 +93,12 @@ function CreateWinRewardSetsFromItem(item){
 }
 
 genItem()
+var x = new GenItem({})
 rewardSet = CreateWinRewardSetsFromItem(allPossibleItem)
 sumWinProb = calculateAllProbability(rewardSet)
 loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
 //printNewProbAndGetResult()
 printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
-printItemInJSON.print()
+//printItemInJSON.print()
+printItemInJSON.writeFile('./output/slot1.json')
