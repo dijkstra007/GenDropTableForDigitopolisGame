@@ -2,8 +2,7 @@ const GenItem  = require('./src/GenItem')
 const Item = require('./src/Item')
 const ExportItemInJSONFormat = require('./src/ExportItemInJSONFormat')
 
-var multiplier = [0,5,10,20,50,100,200,500,1000]
-var rewardTable = [0,250,500,1000,2500,5000,10000,25000,50000]
+var rewardTable = [0,50,50,100,100,200,200,500,1000,2000,5000,10000]
 const RETURN_RATE = 90.0000000
 const EPSILON = 0.5;
 const MIN_BET_PER_LINE = 50;
@@ -42,24 +41,26 @@ function printNewProbAndGetResult(){
 }
 
 function genItem(){
-  allPossibleItem = (new GenItem({numberOfFace:8,numberOfRows:3,rewardTable:rewardTable}) ).getItem()
-  allPossibleItem.sort(function(a,b){return a.reward - b.reward})
-  numberOfWinning  = allPossibleItem.length-1;
-  console.log("number of winning = "+numberOfWinning)
+  allPossibleItem = (new GenItem({numberOfFace:11,numberOfRows:3,numberOfColums:3,rewardTable:rewardTable}) ).getItem()
+  console.log("allPossibleItem size = "+allPossibleItem.length)
+   allPossibleItem.sort(function(a,b){return a.reward - b.reward})
+  // numberOfWinning  = allPossibleItem.length-1;
+  // console.log("number of winning = "+numberOfWinning)
 }
 
 function calculateAllProbability(rewardSet){
   let sumWinProb = 0;
   let p = 0.2
   let array = Array.from(rewardSet)
-  for(val of array){
+  for(let i = 0 ;i< array.length ;i++){
     if(p>=0.0006)
       p=p*0.5
     else {
-      p=p*0.919
+      p=p*0.9895437
     }
+    
     sumWinProb += p
-    let indexList = findIndexOfItemWhichRewardEqual(val)
+    let indexList = findIndexOfItemWhichRewardEqual(array[i])
     let probEachItem = p/indexList.length
     for(val1 of indexList){
       allPossibleItem[val1].setProbability(probEachItem);
@@ -98,7 +99,7 @@ rewardSet = CreateWinRewardSetsFromItem(allPossibleItem)
 sumWinProb = calculateAllProbability(rewardSet)
 loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
-//printNewProbAndGetResult()
+printNewProbAndGetResult()
 printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
-//printItemInJSON.print()
-//printItemInJSON.writeFile('./output/slot1.json')
+printItemInJSON.print()
+printItemInJSON.writeFile('./output/slot2.json')
