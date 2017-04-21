@@ -101,4 +101,4 @@ allPossibleItem[0].setProbability(loseProb);
 //printNewProbAndGetResult()
 printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
 //printItemInJSON.print()
-printItemInJSON.writeFile('./output/slot1.json')
+//printItemInJSON.writeFile('./output/slot1.json')
