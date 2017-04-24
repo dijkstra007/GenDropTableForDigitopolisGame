@@ -2,11 +2,16 @@ const GenItem  = require('./src/GenItem')
 const Item = require('./src/Item')
 const ExportItemInJSONFormat = require('./src/ExportItemInJSONFormat')
 
-var rewardTable = [0,50,50,100,100,200,200,500,1000,2000,5000,10000]
+var multiplier = [0,5,5,10,10,20,20,50,100,200,500,1000]
+var rewardTable = []
 const RETURN_RATE = 90.0000000
 const EPSILON = 0.5;
-const MIN_BET_PER_LINE = 50;
+const MIN_BET_PER_LINE = 10;
 const NUM_OF_POSSIBLE_COMBINATION = 1536
+const LINE_TO_WIN = 27
+const NUMBER_OF_FACE = 11
+const NUMBER_OF_ROW = 3
+const NUMBER_OF_COLUMN = 3
 
 
 var sumWinProb = 0;
@@ -35,28 +40,28 @@ function printNewProbAndGetResult(){
     console.log(" Reward: "+aReward+" Prob: "+aProb)
     
   }
-  console.log("new sumMoney "+sum)
-  console.log("return rate: "+sum/150000000*100)
+  console.log("user paid "+(MIN_BET_PER_LINE*LINE_TO_WIN*1000000))
+  console.log("user get "+sum)
+  console.log("return rate: "+sum/(MIN_BET_PER_LINE*LINE_TO_WIN*1000000)*100)
   console.log("sum of win prob: "+sumWinProb)
 }
 
 function genItem(){
-  allPossibleItem = (new GenItem({numberOfFace:11,numberOfRows:3,numberOfColums:3,rewardTable:rewardTable}) ).getItem()
+  allPossibleItem = (new GenItem({numberOfFace:NUMBER_OF_FACE,numberOfRows:NUMBER_OF_ROW,numberOfColums:NUMBER_OF_COLUMN,rewardTable:rewardTable}) ).getItem()
   console.log("allPossibleItem size = "+allPossibleItem.length)
    allPossibleItem.sort(function(a,b){return a.reward - b.reward})
-  // numberOfWinning  = allPossibleItem.length-1;
-  // console.log("number of winning = "+numberOfWinning)
+
 }
 
 function calculateAllProbability(rewardSet){
   let sumWinProb = 0;
-  let p = 0.2
+  let p = 0.16
   let array = Array.from(rewardSet)
   for(let i = 0 ;i< array.length ;i++){
-    if(p>=0.0006)
+    if(p>=0.001)
       p=p*0.5
     else {
-      p=p*0.9895437
+      p=p*0.9930755
     }
     
     sumWinProb += p
@@ -93,6 +98,15 @@ function CreateWinRewardSetsFromItem(item){
   return rewardSet
 }
 
+function InitialRewardTableFromMultiplier(multiplier,min_bet_per_line){
+  let rewardTable = []
+  for(val of multiplier){
+    rewardTable.push(min_bet_per_line*val)
+  }
+  return rewardTable
+}
+
+rewardTable = InitialRewardTableFromMultiplier(multiplier,MIN_BET_PER_LINE)
 genItem()
 var x = new GenItem({})
 rewardSet = CreateWinRewardSetsFromItem(allPossibleItem)
