@@ -4,30 +4,28 @@ class SlotItem{
   constructor(props){
     this.itemList = props.itemList
     this.countList = props.countList
-    this.itemListWithCountList = this.combineItemAndCountList()
+    this.itemListWithCountList = this.combineItemAndCountList(this.itemList,this.countList)
     this.rewardTable = props.rewardTable
     this.reward = 0
     this.probability = 0
-    this.updateItemReward();
+    this.updateItemReward(this.itemListWithCountList);
 
     }
-  combineItemAndCountList(){
+  combineItemAndCountList(itemList,countList){
     let itemAndCountList = []
-    for(let i=0;i< this.itemList.length;i++){
-      itemAndCountList.push(new Item({item:this.itemList[i],count:this.countList[i]}))
+    for(let i=0;i< itemList.length;i++){
+      itemAndCountList.push(new Item({item: itemList[i],count: countList[i]}))
     }
     return itemAndCountList
   }
-  updateItemReward(){
-      const items = this.itemList
-      for(let val of items){
-        if(val!=0){
-          var index = val
-          this.reward += this.rewardTable[index]
-        }
-      }
+  updateItemReward(itemListWithCountList){
+    for(let i = 0 ;i < itemListWithCountList.length ;i++){
+      const multipier = itemListWithCountList[i].count-3+1
+      const index = itemListWithCountList[i].item
+      this.reward += this.rewardTable[index]*multipier
+      console.log(this.rewardTable[index]+" "+multipier)
+    }
   }
-  
   adjustProbability(probability){
     this.probability += probability
   }

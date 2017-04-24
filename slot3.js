@@ -8,10 +8,10 @@ const RETURN_RATE = 90.0000000
 const EPSILON = 0.5;
 const MIN_BET_PER_LINE = 10;
 const NUM_OF_POSSIBLE_COMBINATION = 1536
-const LINE_TO_WIN = 27
-const NUMBER_OF_FACE = 11
+const LINE_TO_WIN = 20
+const NUMBER_OF_FACE = 3
 const NUMBER_OF_ROW = 3
-const NUMBER_OF_COLUMN = 3
+const NUMBER_OF_COLUMN = 5
 
 
 var sumWinProb = 0;
@@ -58,7 +58,7 @@ function calculateAllProbability(rewardSet){
   let p = 0.16
   let array = Array.from(rewardSet)
   for(let i = 0 ;i< array.length ;i++){
-    if(p>=0.001)
+    if(p>=0.0001)
       p=p*0.5
     else {
       p=p*0.9930755
@@ -115,5 +115,5 @@ loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
 printNewProbAndGetResult()
 printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
-// printItemInJSON.print()
-// printItemInJSON.writeFile('./output/slot2.json')
+//printItemInJSON.print()
+//printItemInJSON.writeFile('./output/slot3.json')
