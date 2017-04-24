@@ -23,7 +23,6 @@ class SlotItem{
       const multipier = itemListWithCountList[i].count-3+1
       const index = itemListWithCountList[i].item
       this.reward += this.rewardTable[index]*multipier
-      console.log(this.rewardTable[index]+" "+multipier)
     }
   }
   adjustProbability(probability){

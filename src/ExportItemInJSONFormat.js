@@ -2,8 +2,12 @@ const SlotItem = require('./SlotItem')
 class ExportItemInJSONFormat{
   constructor(props){
     this.allPossibleItem = props.allPossibleItem
+    this.input = props.input
   }
   print(){
+    console.log("input : {")
+    console.log(this.input)
+    
     console.log("dropTable = [")
     for(let i = 0;i<this.allPossibleItem.length;i++){
       let rate = this.allPossibleItem[i].getProbability()
@@ -24,8 +28,11 @@ class ExportItemInJSONFormat{
   }
   writeFile(fileName){
     var o = {}
-    var key = 'dropTable'
-    o[key] = []
+    var key1 = 'input'
+    var key2 = 'dropTable'
+    
+    o[key1] = this.input
+    o[key2] = []
     for(let i=0;i<this.allPossibleItem.length;i++){
       let rate = this.allPossibleItem[i].getProbability()
       let itemPairedCount = this.allPossibleItem[i].getItemListWithCountNumber()
@@ -34,9 +41,8 @@ class ExportItemInJSONFormat{
         dropRate: rate,
         dropSymbols: itemPairedCount
       }
-      o[key].push(data)
+      o[key2].push(data)
     }
-    // fs.writeFile('slot1.json', JSON.stringify(o, null, 4))
     var fs = require('fs')
     fs.writeFile(fileName, JSON.stringify(o, null, 4));
   }

@@ -13,7 +13,13 @@ const NUMBER_OF_FACE = 11
 const NUMBER_OF_ROW = 3
 const NUMBER_OF_COLUMN = 3
 
-
+var inputObject = {
+  "NUMBER_OF_FACE":NUMBER_OF_FACE,
+  "NUMBER_OF_ROW":NUMBER_OF_ROW,
+  "NUMBER_OF_COLUMN":NUMBER_OF_COLUMN,
+  "MIN_BET_PER_LINE":MIN_BET_PER_LINE,
+  "LINE_TO_WIN":LINE_TO_WIN
+}
 var sumWinProb = 0;
 var allPossibleItem = []
 var rewardSet = new Set();
@@ -113,7 +119,7 @@ rewardSet = CreateWinRewardSetsFromItem(allPossibleItem)
 sumWinProb = calculateAllProbability(rewardSet)
 loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
-printNewProbAndGetResult()
-printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
-// printItemInJSON.print()
-// printItemInJSON.writeFile('./output/slot2.json')
+//printNewProbAndGetResult()
+printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem,input:inputObject})
+printItemInJSON.print()
+printItemInJSON.writeFile('./output/slot2.json')
