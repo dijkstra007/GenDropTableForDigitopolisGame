@@ -4,12 +4,14 @@ const ExportItemInJSONFormat = require('./src/ExportItemInJSONFormat')
 
 var multiplier = [0,5,5,10,10,20,20,50,100,200,500,1000]
 var rewardTable = []
+var fourFacesMultiplier = [0,4,4,5,5,4,4,3,2,2,2,2]
+var fiveFacesMultiplier = [0,20,20,15,15,10,10,6,5,5,4,5]
 const RETURN_RATE = 90.0000000
-const EPSILON = 0.5;
+const EPSILON = 0.001;
 const MIN_BET_PER_LINE = 10;
 const NUM_OF_POSSIBLE_COMBINATION = 1536
 const LINE_TO_WIN = 20
-const NUMBER_OF_FACE = 3
+const NUMBER_OF_FACE = 11
 const NUMBER_OF_ROW = 3
 const NUMBER_OF_COLUMN = 5
 
@@ -20,6 +22,9 @@ var rewardSet = new Set();
 var total_time = []
 var loseProb;
 
+function isValueAcceptable(val,target){
+  return val <= target+EPSILON && val >= target-EPSILON
+}
 function printNewProbAndGetResult(){
   let sum=0;
   let sumWinProb=0;
@@ -47,7 +52,7 @@ function printNewProbAndGetResult(){
 }
 
 function genItem(){
-  allPossibleItem = (new GenItem({numberOfFace:NUMBER_OF_FACE,numberOfRows:NUMBER_OF_ROW,numberOfColums:NUMBER_OF_COLUMN,rewardTable:rewardTable}) ).getItem()
+  allPossibleItem = (new GenItem({numberOfFace:NUMBER_OF_FACE,numberOfRows:NUMBER_OF_ROW,numberOfColums:NUMBER_OF_COLUMN,rewardTable:rewardTable,fourFacesMultiplier:fourFacesMultiplier,fiveFacesMultiplier:fiveFacesMultiplier}) ).getItem()
   console.log("allPossibleItem size = "+allPossibleItem.length)
    allPossibleItem.sort(function(a,b){return a.reward - b.reward})
 
@@ -55,15 +60,21 @@ function genItem(){
 
 function calculateAllProbability(rewardSet){
   let sumWinProb = 0;
-  let p = 0.16
+  let p = 0.2
   let array = Array.from(rewardSet)
   for(let i = 0 ;i< array.length ;i++){
-    if(p>=0.0001)
+  
+    if(p>=0.001)
       p=p*0.5
     else {
-      p=p*0.9930755
+      p=p*0.9804759
     }
-    
+    // if(p>=0.00001){
+    //   p=p*0.791
+    // }
+    // else{
+    //   p=p*0.5
+    // }
     sumWinProb += p
     let indexList = findIndexOfItemWhichRewardEqual(array[i])
     let probEachItem = p/indexList.length
@@ -115,5 +126,5 @@ loseProb = 1.0000000000-(sumWinProb)
 allPossibleItem[0].setProbability(loseProb);
 printNewProbAndGetResult()
 printItemInJSON =  new ExportItemInJSONFormat({allPossibleItem:allPossibleItem})
-//printItemInJSON.print()
-//printItemInJSON.writeFile('./output/slot3.json')
+printItemInJSON.print()
+printItemInJSON.writeFile('./output/slot3.json')

@@ -6,6 +6,8 @@ class GenItem{
     this.genWinningArr = []
     this.allPossibleItemArray = []
     this.rewardTable = props.rewardTable
+    this.fourFacesMultiplier = props.fourFacesMultiplier
+    this.fiveFacesMultiplier = props.fiveFacesMultiplier
     this.numberOfFace = props.numberOfFace
     this.numberOfRows = props.numberOfRows
     this.numberOfColums = props.numberOfColums
@@ -35,7 +37,11 @@ class GenItem{
           temp.push(this.genItemArr[i]);
       }
       for(let i=0;i<this.countList.length;i++){
-        this.allPossibleItemArray.push(new SlotItem({itemList:temp,countList:this.countList[i],rewardTable:this.rewardTable}));
+        this.allPossibleItemArray.push(new SlotItem({itemList:temp,countList:this.countList[i],
+                                                    rewardTable:this.rewardTable,
+                                                    fourFacesMultiplier: this.fourFacesMultiplier,
+                                                    fiveFacesMultiplier:this.fiveFacesMultiplier
+                                                  }));
       }
       return ;
     }

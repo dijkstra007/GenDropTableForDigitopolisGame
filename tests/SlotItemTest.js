@@ -27,9 +27,13 @@ describe('SlotItem',function(){
     expect(itemAndCountList).to.deep.equal(obj)
   })
   it('Update Reward Test',function(){
-      let slotItem = new SlotItem({itemList:[3,4,5],countList:[3,4,5],rewardTable:[0,250,500,1000,2500,5000,10000,25000,50000]})
-      let reward = slotItem.getReward() // 1000+2*2500+5000*3 = 21000
-      expect(reward).to.equal(21000)
+      let slotItem = new SlotItem({itemList:[3,4,5],
+                                  countList:[3,4,5],
+                                  rewardTable:[0,250,500,1000,2500,5000,10000,25000,50000],
+                                  fourFacesMultiplier:[0,4,4,5,5,4,4,3,2,2,2,2],
+                                  fiveFacesMultiplier:[0,20,20,15,15,10,10,6,5,5,4,5]})
+      let reward = slotItem.getReward() // 1000+2500*5+50000 = 63500
+      expect(reward).to.equal(63500)
       
   })
 })

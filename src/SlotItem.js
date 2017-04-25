@@ -6,6 +6,8 @@ class SlotItem{
     this.countList = props.countList
     this.itemListWithCountList = this.combineItemAndCountList(this.itemList,this.countList)
     this.rewardTable = props.rewardTable
+    this.fourFacesMultiplier = props.fourFacesMultiplier
+    this.fiveFacesMultiplier = props.fiveFacesMultiplier
     this.reward = 0
     this.probability = 0
     this.updateItemReward(this.itemListWithCountList);
@@ -20,9 +22,17 @@ class SlotItem{
   }
   updateItemReward(itemListWithCountList){
     for(let i = 0 ;i < itemListWithCountList.length ;i++){
-      const multipier = itemListWithCountList[i].count-3+1
+      const countItem = itemListWithCountList[i].count
       const index = itemListWithCountList[i].item
-      this.reward += this.rewardTable[index]*multipier
+      if(countItem==3){
+        this.reward += this.rewardTable[index]
+      }
+      else if(countItem==4){
+        this.reward += this.rewardTable[index]*this.fourFacesMultiplier[index]
+      }
+      else if(countItem==5){
+        this.reward += this.rewardTable[index]*this.fiveFacesMultiplier[index]
+      }
     }
   }
   adjustProbability(probability){
